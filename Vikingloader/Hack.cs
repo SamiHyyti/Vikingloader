@@ -17,7 +17,6 @@ namespace Vikingloader
         private float pSpeed;
         Player localPlayer;
         private string text1,text2,text3,text4;
-        //private GUIStyle Style, espColor;
         private bool charEsp = false, berryEsp = false, oreEsp = false;
         private Rect wRect = new Rect(0, 0, 200, 300);
         public void Start()
