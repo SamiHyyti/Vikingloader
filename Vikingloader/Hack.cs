@@ -89,7 +89,7 @@ namespace Vikingloader
             }
             if (toggleSpeedhack)
             {
-                speedMult = UIHelper.Slider(1, 1, 10);
+                speedMult = UIHelper.Slider(speedMult, 1, 10);
             }
             if (UIHelper.Button(text2))
             {
