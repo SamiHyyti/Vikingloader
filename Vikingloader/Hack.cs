@@ -14,7 +14,7 @@ namespace Vikingloader
     {
         private bool ShowMenu = false;
         private bool toggleSpeedhack = false;
-        private float pSpeed;
+        private float pSpeed, speedMult;
         Player localPlayer;
         private string text1,text2,text3,text4;
         private bool charEsp = false, berryEsp = false, oreEsp = false;
@@ -32,41 +32,8 @@ namespace Vikingloader
             localPlayer = Player.m_localPlayer;
             if (localPlayer != null)
             {
-                if (!toggleSpeedhack)
-                {
-                    localPlayer.m_speed = pSpeed;
-                    text1 = "Speedhack <color=red>OFF</color>";
-                }
-                else
-                {
-                    localPlayer.m_speed = pSpeed * 3;
-                    text1 = "Speedhack <color=green>ON</color>";
-                }
-
-                if (!charEsp)
-                {
-                    text2 = "ESP <color=red>OFF</color>";
-                }
-                else
-                {
-                    text2 = "ESP <color=green>ON</color>";
-                }
-                if (!berryEsp)
-                {
-                    text3 = "berryESP <color=red>OFF</color>";
-                }
-                else
-                {
-                    text3 = "berryESP <color=green>ON</color>";
-                }
-                if (!oreEsp)
-                {
-                    text4 = "oreESP <color=red>OFF</color>";
-                }
-                else
-                {
-                    text4 = "oreESP <color=green>ON</color>";
-                }
+                updateText();
+                
             }
             if (Input.GetKeyDown(KeyCode.Home))
             {
@@ -119,6 +86,10 @@ namespace Vikingloader
             if (UIHelper.Button(text1))
             {
                 toggleSpeedhack = !toggleSpeedhack;
+            }
+            if (toggleSpeedhack)
+            {
+                speedMult = UIHelper.Slider(1, 1, 10);
             }
             if (UIHelper.Button(text2))
             {
@@ -253,6 +224,44 @@ namespace Vikingloader
                         }
                     }
                 }
+            }
+        }
+        private void updateText()
+        {
+            if (!toggleSpeedhack)
+            {
+                localPlayer.m_speed = pSpeed;
+                text1 = "Speedhack <color=red>OFF</color>";
+            }
+            else
+            {
+                localPlayer.m_speed = pSpeed * speedMult;
+                text1 = "Speedhack <color=green>ON</color>";
+            }
+
+            if (!charEsp)
+            {
+                text2 = "ESP <color=red>OFF</color>";
+            }
+            else
+            {
+                text2 = "ESP <color=green>ON</color>";
+            }
+            if (!berryEsp)
+            {
+                text3 = "berryESP <color=red>OFF</color>";
+            }
+            else
+            {
+                text3 = "berryESP <color=green>ON</color>";
+            }
+            if (!oreEsp)
+            {
+                text4 = "oreESP <color=red>OFF</color>";
+            }
+            else
+            {
+                text4 = "oreESP <color=green>ON</color>";
             }
         }
     }
