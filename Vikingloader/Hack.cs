@@ -14,24 +14,33 @@ namespace Vikingloader
     {
         private bool ShowMenu = false;
         private bool toggleSpeedhack = false;
-        private float pSpeed, speedMult;
+        private bool initSpeed = false;
+        private float p_m_speed,p_m_runSpeed,p_m_walkSpeed, speedMult;
         Player localPlayer;
-        private string text1,text2,text3,text4;
+        private string text1,text2,text3,text4,text5;
         private bool charEsp = false, berryEsp = false, oreEsp = false;
         private Rect wRect = new Rect(0, 0, 200, 300);
         public void Start()
         {
-            pSpeed = 4f;
+            speedMult = 1.0f;
             text1 = "Speedhack <color=red>OFF</color>";
             text2 = "ESP <color=red>OFF</color>";
             text3 = "berryESP <color=red>OFF</color>";
             text4 = "oreESP <color=red>OFF</color>";
+            text5 = "GOD MODE <color=red>OFF</color>";
         }
         public void Update()
         {
             localPlayer = Player.m_localPlayer;
             if (localPlayer != null)
             {
+                if (!initSpeed)
+                {
+                    p_m_speed = Player.m_localPlayer.m_speed;
+                    p_m_runSpeed = Player.m_localPlayer.m_runSpeed;
+                    p_m_walkSpeed = Player.m_localPlayer.m_walkSpeed;
+                    initSpeed = true;
+                }
                 updateText();
                 
             }
@@ -89,7 +98,7 @@ namespace Vikingloader
             }
             if (toggleSpeedhack)
             {
-                speedMult = UIHelper.Slider(speedMult, 1, 10);
+                speedMult = UIHelper.Slider(speedMult, 1, 20);
             }
             if (UIHelper.Button(text2))
             {
@@ -102,6 +111,10 @@ namespace Vikingloader
             if (UIHelper.Button(text4))
             {
                 oreEsp = !oreEsp;
+            }
+            if (UIHelper.Button(text5))
+            {
+                localPlayer.SetGodMode(!localPlayer.InGodMode());
             }
             //var ismouseCapture = typeof(GameCamera).GetField("m_mouseCapture", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             //UIHelper.Label("Enabled: "+ismouseCapture.GetValue(GameCamera.instance).ToString());
@@ -230,12 +243,16 @@ namespace Vikingloader
         {
             if (!toggleSpeedhack)
             {
-                localPlayer.m_speed = pSpeed;
+                localPlayer.m_speed = p_m_speed;
+                localPlayer.m_runSpeed = p_m_runSpeed;
+                localPlayer.m_walkSpeed = p_m_walkSpeed;
                 text1 = "Speedhack <color=red>OFF</color>";
             }
             else
             {
-                localPlayer.m_speed = pSpeed * speedMult;
+                localPlayer.m_speed = p_m_speed * speedMult;
+                localPlayer.m_runSpeed = p_m_runSpeed * speedMult;
+                localPlayer.m_walkSpeed = p_m_walkSpeed * speedMult;
                 text1 = "Speedhack <color=green>ON</color>";
             }
 
@@ -262,6 +279,14 @@ namespace Vikingloader
             else
             {
                 text4 = "oreESP <color=green>ON</color>";
+            }
+            if (!localPlayer.InGodMode())
+            {
+                text5 = "GOD MODE <color=red>OFF</color>";
+            }
+            else
+            {
+                text5 = "GOD MODE <color=green>ON</color>";
             }
         }
     }
