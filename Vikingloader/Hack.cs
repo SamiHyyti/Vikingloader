@@ -150,7 +150,8 @@ namespace Vikingloader
         }
         List<Character> characterList;
         Pickable[] pickableList;
-        MineRock5[] oreList;
+        MineRock5[] ore5List;
+        MineRock[] oreList;
         float espCache;
         private void DrawEsp()
         { 
@@ -185,7 +186,7 @@ namespace Vikingloader
         {
             if (Time.time >= berryCache)
             {
-                berryCache = Time.time + .5f;//.5 seconds till next objectlist scan
+                berryCache = Time.time + 2f;//3 seconds till next objectlist scan
                 //characterList = FindObjectsOfType<Character>();
                 pickableList = FindObjectsOfType<Pickable>();
             }
@@ -195,7 +196,7 @@ namespace Vikingloader
             {
                 foreach (Pickable pickable in pickableList)
                 {
-                    if (pickable.GetHoverText().Length > 0 && pickable.GetHoverName().Length > 0)
+                    if (pickable.GetHoverText().Length > 0 && pickable.GetHoverName().Contains("erries"))
                     {
                         Vector3 pos = pickable.transform.position;
                         Vector3 posScreen = Camera.main.WorldToScreenPoint(pos);
@@ -215,23 +216,41 @@ namespace Vikingloader
         {
             if (Time.time >= oreCache)
             {
-                oreCache = Time.time + .5f;//.5 seconds till next objectlist scan
+                oreCache = Time.time + 2f;//.5 seconds till next objectlist scan
                 //characterList = FindObjectsOfType<Character>();
-                oreList = FindObjectsOfType<MineRock5>();
+                oreList = FindObjectsOfType<MineRock>();
+                ore5List = FindObjectsOfType<MineRock5>();
             }
             GUIStyle espColor = new GUIStyle();
             espColor.normal.textColor = Color.blue;
             if (oreEsp)
             {
-                foreach (MineRock5 ore in oreList)
+                foreach (MineRock5 ore in ore5List)
                 {
-                    Vector3 pos = ore.transform.position;
-                    Vector3 posScreen = Camera.main.WorldToScreenPoint(pos);
-                    float dist = Vector3.Distance(pos, localPlayer.transform.position);
-                    if (posScreen.z > 0 & posScreen.y < Screen.width - 2)
+                    if(ore.GetHoverName().Length > 0)
                     {
-                        posScreen.y = Screen.height - (posScreen.y + 1f);
-                        GUI.Label(new Rect(posScreen.x, posScreen.y, 200, 40), ore.GetHoverName() + string.Format(" [{0:0}]", (object)dist), espColor);
+                        Vector3 pos = ore.transform.position;
+                        Vector3 posScreen = Camera.main.WorldToScreenPoint(pos);
+                        float dist = Vector3.Distance(pos, localPlayer.transform.position);
+                        if (posScreen.z > 0 & posScreen.y < Screen.width - 2)
+                        {
+                            posScreen.y = Screen.height - (posScreen.y + 1f);
+                            GUI.Label(new Rect(posScreen.x, posScreen.y, 200, 40), ore.GetHoverName() + string.Format(" [{0:0}]", (object)dist), espColor);
+                        }
+                    }
+                }
+                foreach (MineRock ore in oreList)
+                {
+                    if (ore.GetHoverName().Length > 0)
+                    {
+                        Vector3 pos = ore.transform.position;
+                        Vector3 posScreen = Camera.main.WorldToScreenPoint(pos);
+                        float dist = Vector3.Distance(pos, localPlayer.transform.position);
+                        if (posScreen.z > 0 & posScreen.y < Screen.width - 2)
+                        {
+                            posScreen.y = Screen.height - (posScreen.y + 1f);
+                            GUI.Label(new Rect(posScreen.x, posScreen.y, 200, 40), ore.GetHoverName() + string.Format(" [{0:0}]", (object)dist), espColor);
+                        }
                     }
                 }
             }
