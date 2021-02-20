@@ -116,8 +116,6 @@ namespace Vikingloader
             {
                 localPlayer.SetGodMode(!localPlayer.InGodMode());
             }
-            //var ismouseCapture = typeof(GameCamera).GetField("m_mouseCapture", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            //UIHelper.Label("Enabled: "+ismouseCapture.GetValue(GameCamera.instance).ToString());
             GUI.DragWindow();
         }
         private Texture2D MakeTex(int width, int height, Color col)
@@ -141,8 +139,7 @@ namespace Vikingloader
         { 
             if (Time.time >= espCache)
             {
-                espCache = Time.time + .5f;//.5 seconds till next objectlist scan
-                //characterList = FindObjectsOfType<Character>();
+                espCache = Time.time + .5f;//seconds till next scan
                 characterList = Character.GetAllCharacters();
             }
             GUIStyle espColor = new GUIStyle();
@@ -170,8 +167,7 @@ namespace Vikingloader
         {
             if (Time.time >= berryCache)
             {
-                berryCache = Time.time + 2f;//3 seconds till next objectlist scan
-                //characterList = FindObjectsOfType<Character>();
+                berryCache = Time.time + 2f; //seconds till next scan
                 pickableList = FindObjectsOfType<Pickable>();
             }
             GUIStyle espColor = new GUIStyle();
@@ -200,8 +196,7 @@ namespace Vikingloader
         {
             if (Time.time >= oreCache)
             {
-                oreCache = Time.time + 2f;//.5 seconds till next objectlist scan
-                //characterList = FindObjectsOfType<Character>();
+                oreCache = Time.time + 2f;//seconds till next scan
                 oreList = FindObjectsOfType<MineRock>();
                 ore5List = FindObjectsOfType<MineRock5>();
             }
