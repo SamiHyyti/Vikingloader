@@ -12,17 +12,20 @@ namespace Vikingloader
 {
     public class Hack : MonoBehaviour
     {
-        private bool ShowMenu = false;
-        private bool toggleSpeedhack = false;
-        private bool initSpeed = false;
-        private float p_m_speed,p_m_runSpeed,p_m_walkSpeed, speedMult;
+        private bool ShowMenu = false, initSpeed = false, toggleSpeedhack = false, charEsp = false, berryEsp = false, oreEsp = false, sizeHack = false;
+        private Vector3 scale;
+        private float p_m_speed, p_m_runSpeed, p_m_walkSpeed, p_m_jumpForce, speedMult , scaleMult;
         Player localPlayer;
+        int xRotation;
+        int zRotation;
         private string text1,text2,text3,text4,text5;
-        private bool charEsp = false, berryEsp = false, oreEsp = false;
-        private Rect wRect = new Rect(0, 0, 200, 300);
+        private Rect wRect = new Rect(0, 0, 200, 400);
         public void Start()
         {
+            xRotation = 0;
+            zRotation = 0;
             speedMult = 1.0f;
+            scaleMult = 1.0f;
             text1 = "Speedhack <color=red>OFF</color>";
             text2 = "ESP <color=red>OFF</color>";
             text3 = "berryESP <color=red>OFF</color>";
@@ -36,9 +39,11 @@ namespace Vikingloader
             {
                 if (!initSpeed)
                 {
-                    p_m_speed = Player.m_localPlayer.m_speed;
-                    p_m_runSpeed = Player.m_localPlayer.m_runSpeed;
-                    p_m_walkSpeed = Player.m_localPlayer.m_walkSpeed;
+                    scale = localPlayer.transform.localScale;
+                    p_m_speed = localPlayer.m_speed;
+                    p_m_runSpeed = localPlayer.m_runSpeed;
+                    p_m_walkSpeed = localPlayer.m_walkSpeed;
+                    p_m_jumpForce = localPlayer.m_jumpForce;
                     initSpeed = true;
                 }
                 updateText();
@@ -46,7 +51,7 @@ namespace Vikingloader
             }
             if (Input.GetKeyDown(KeyCode.Home))
             {
-                wRect = new Rect(0, 0, 200, 300);
+                wRect = new Rect(0, 0, 200, 400);
                 charEsp = false;
                 berryEsp = false;
                 oreEsp = false;
@@ -86,7 +91,7 @@ namespace Vikingloader
             GUIStyle style = new GUIStyle(GUI.skin.box);
             style.normal.background = MakeTex(2, 2, new Color(0f, 0f, 0f, 0.8f));
             
-            UIHelper.Begin("<b>VikingHack</b>", 0, 0, 200, 300, 15, 30, 5, style);
+            UIHelper.Begin("<b>VikingHack</b>", 0, 0, 200, 400, 15, 30, 5, style);
             if (UIHelper.Button("Heal"))
             {
                 localPlayer.Heal(100);
@@ -115,6 +120,14 @@ namespace Vikingloader
             if (UIHelper.Button(text5))
             {
                 localPlayer.SetGodMode(!localPlayer.InGodMode());
+            }
+            if (UIHelper.Button("BIGGIFY"))
+            {
+                sizeHack = !sizeHack;
+            }
+            if (sizeHack)
+            {
+                scaleMult = UIHelper.Slider(scaleMult, 1, 3);
             }
             GUI.DragWindow();
         }
@@ -250,7 +263,28 @@ namespace Vikingloader
                 localPlayer.m_walkSpeed = p_m_walkSpeed * speedMult;
                 text1 = "Speedhack <color=green>ON</color>";
             }
-
+            if (sizeHack)
+            {
+                localPlayer.transform.localScale = scale * scaleMult;
+                localPlayer.m_jumpForce = p_m_jumpForce * scaleMult;
+                if (!toggleSpeedhack)
+                {
+                    localPlayer.m_speed = p_m_speed * scaleMult;
+                    localPlayer.m_runSpeed = p_m_runSpeed * scaleMult;
+                    localPlayer.m_walkSpeed = p_m_walkSpeed * scaleMult;
+                }
+            }
+            else
+            {
+                localPlayer.transform.localScale = scale;
+                localPlayer.m_jumpForce = p_m_jumpForce;
+                if (!toggleSpeedhack)
+                {
+                    localPlayer.m_speed = p_m_speed;
+                    localPlayer.m_runSpeed = p_m_runSpeed;
+                    localPlayer.m_walkSpeed = p_m_walkSpeed;
+                }
+            }
             if (!charEsp)
             {
                 text2 = "ESP <color=red>OFF</color>";
